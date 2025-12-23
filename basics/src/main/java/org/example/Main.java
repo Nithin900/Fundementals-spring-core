@@ -3,8 +3,8 @@ package org.example;
 import java.util.Map;
 
 import org.example.beans.Person;
-import org.example.beans.Vehicle;
 import org.example.beans.PrototypeService;
+import org.example.beans.Vehicle;
 import org.example.config.ProjectConfig;
 import org.example.services.EmployeeService;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -47,7 +47,7 @@ public class Main {
             System.out.println("\n---------- 4. PROTOTYPE SCOPE ----------");
             demonstratePrototypeScope(context);
 
-            // ==================== 5. LAZY INITIALIZATION ====================
+            // ===================    = 5. LAZY INITIALIZATION ====================
             System.out.println("\n---------- 5. LAZY INITIALIZATION ----------");
             demonstrateLazyInitialization(context);
 
