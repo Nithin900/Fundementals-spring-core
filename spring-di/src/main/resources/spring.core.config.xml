@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+<!-- bean definitions here -->
+    <!-- beans for AddressService implementations --><!--    either name or id should be there-->
+    <bean id="addressService" name="addressService" class="org.example.AddressServiceImpl" >
+        <property name="city" value="New York" />
+        <property name="street" value="Broadway" />
+    </bean>
+<!--    <bean id="addressService" class="org.example.AddressServiceImpl">-->
+<!--        <constructor-arg value="New York" />-->
+<!--        <constructor-arg value="Broadway" />-->
+<!--    </bean>-->
+
+    <!-- beans for Grade -->
+    <!--    <bean id="grades" class="java.util.LinkedHashMap">-->
+<!--        <constructor-arg>-->
+<!--            <map>-->
+<!--                <entry key="math" value-ref="mathGrade" />-->
+<!--                <entry key="science" value-ref="scienceGrade" />-->
+<!--            </map>-->
+<!--        </constructor-arg>-->
+<!--    </bean>-->
+    <!-- Util namespace for standalone collections -->
+    <util:map id="grades" map-class="java.util.LinkedHashMap">
+        <entry key="math" value-ref="mathGrade" />
+        <entry key="science" value-ref="scienceGrade" />
+    </util:map>
+    <bean id="mathGrade" class="org.example.Grade">
+        <property name="subject" value="math" />
+        <property name="grade" value="A" />
+    </bean>
+    <bean id="scienceGrade" class="org.example.Grade">
+        <property name="subject" value="science" />
+        <property name="grade" value="B+" />
+    </bean>
+
+    <!-- beans for Course -->
+    <bean id="courses" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="javaCourse" />
+                <ref bean="springCourse" />
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="javaCourse" class="org.example.Course">
+        <property name="courseId" value="01" />
+        <property name="courseName" value="Java" />
+    </bean>
+    <bean id="springCourse" class="org.example.Course">
+        <property name="courseId" value="02" />
+        <property name="courseName" value="Spring Framework" />
+    </bean>
+
+    <!--    bean for hobbies-->
+    <bean id="hobbies" class="java.util.HashSet">
+        <constructor-arg>
+            <set>
+                <value>Reading</value>
+                <value>Coding</value>
+                <value>Singing</value>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <!--    bean for friend-->
+    <bean id="friend" class="org.example.Friend">
+        <property name="fid" value="001" />
+        <property name="name" value="Alice" />
+    </bean>
+
+    <!--    constructor injection-->
+    <bean id="studentConstructorInjection" class="org.example.Student">
+        <constructor-arg value="1" />
+        <constructor-arg value="Alice" />
+        <constructor-arg ref="addressService"/>
+        <constructor-arg ref="courses"/>
+        <constructor-arg ref="hobbies"/>
+        <constructor-arg ref="grades"/>
+        <constructor-arg ref="friend"/>
+    </bean>
+
+    <!--    setter injection-->
+    <bean id="studentSetterInjection" class="org.example.Student">
+        <property name="sid" value="2"/>
+        <property name="studentName" value="Alice"/>
+        <property name="addressService" ref="addressService"/>
+        <property name="courses" ref="courses"/>
+        <property name="hobbies" ref="hobbies"/>
+        <property name="grades" ref="grades" />
+        <property name="friend" ref="friend" />
+    </bean>
+
+    <!--    interface injection-->
+    <bean id="addressInterfaceInjection" class="org.example.AddressServiceImpl">
+        <constructor-arg value="New York" />
+        <constructor-arg value="Broadway" />
+    </bean>
+
+    <!--    Autowiring-->
+    <!--    Autowiring allows Spring to automatically inject dependencies into a bean without needing explicit setter methods.
+        Instead, Spring uses naming conventions or the type of the property to match and inject dependencies.-->
+    <bean id="autowiringStudent" class="org.example.Student" autowire="byName">
+        <property name="sid" value="2"/>
+        <property name="studentName" value="Alice"/>
+    </bean>
+
+<!--    <bean id="autowiringStudent" class="org.example.Student" autowire="constructor">-->
+<!--        <constructor-arg name="sid" value="2" />-->
+<!--        <constructor-arg name="studentName" value="Alice" />-->
+<!--    </bean>-->
+
+    <!-- Enable annotation-based configuration -->
+<!--        <context:annotation-config/>-->
+</beans>
