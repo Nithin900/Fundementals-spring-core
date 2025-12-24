@@ -3,7 +3,9 @@ package org.example;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
+import org.example.config.DemoConfig;
+import org.example.demo.SelfInvokeService;
+import org.springframework.aop.support.AopUtils;
 
 import java.util.*;
 
@@ -12,11 +14,42 @@ public class Main {
 
         //---------------- Dependency Injection using java configurations ----------------
 
-        // Load the Spring configuration file
-        ApplicationContext ctx= new AnnotationConfigApplicationContext(SpringConfig.class);
+        AnnotationConfigApplicationContext javaConfigCtx = new AnnotationConfigApplicationContext();
 
-        Student student= ctx.getBean(Student.class);
-        System.out.println(student);
+        // Scan components/aspects and add drill config to see lifecycle/AOP output
+        javaConfigCtx.scan("org.example");
+        javaConfigCtx.register(SpringConfig.class, DemoConfig.class);
+
+        System.out.println("=== REFRESH CONTEXT (JAVA CONFIG + DRILLS) ===");
+        javaConfigCtx.refresh();
+
+        // Show Student bean populated from Java config
+        Student javaConfigStudent = javaConfigCtx.getBean(Student.class);
+        System.out.println("\n----- Dependency injection using java config: -----");
+        System.out.println(javaConfigStudent);
+
+        System.out.println("\n=== SELF INVOCATION DRILL ===");
+        SelfInvokeService svc = javaConfigCtx.getBean(SelfInvokeService.class);
+        System.out.println("SelfInvokeService runtime class = " + svc.getClass());
+        System.out.println("Is AOP proxy? " + AopUtils.isAopProxy(svc));
+
+        System.out.println("\n-- Calling inner() from outside (should be advised) --");
+        svc.inner();
+
+        System.out.println("\n-- Calling outer() (inner() called internally, should bypass advice) --");
+        svc.outer();
+
+        System.out.println("\n=== PROTOTYPE DRILL ===");
+        Object p1 = javaConfigCtx.getBean("prototypeThing");
+        Object p2 = javaConfigCtx.getBean("prototypeThing");
+        System.out.println("prototypeThing same instance? " + (p1 == p2));
+
+        System.out.println("\n=== LAZY INIT DRILL ===");
+        System.out.println("Requesting lazyThing now...");
+        javaConfigCtx.getBean("lazyThing"); // constructor prints here, not at refresh
+
+        System.out.println("\n=== CLOSE CONTEXT (DESTROY DRILL) ===");
+        javaConfigCtx.close();
 
 //        -------------------- For ComponentScan only(Setiing values) --------------------
 //        AnnotationConfigApplicationContext context= new AnnotationConfigApplicationContext(SpringConfig.class);
