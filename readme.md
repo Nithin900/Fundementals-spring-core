@@ -59,6 +59,12 @@ Dependencies can be automatically wired by Spring based on predefined rules or a
 
 **Note:** It's important to note that field injection is generally considered less preferable than constructor injection or setter injection due to potential issues with testability, encapsulation, and readability. It's often recommended to favor constructor injection or setter injection over field injection whenever possible.
 
+**Lifecycle/definition drills (spring-di module):**
+- Added BeanDefinition/Instance/Destruction loggers to observe bean creation order and proxies (`spring-di/src/main/java/org/example/infra/*`).
+- `DemoConfig` wires the drill beans, a prototype bean, and a lazy bean (`spring-di/src/main/java/org/example/config/DemoConfig.java`).
+- AOP self-invocation demo with `SelfInvokeService` + `TraceAspect` (`spring-di/src/main/java/org/example/demo/*`).
+- Run `spring-di/src/main/java/org/example/demo/RunDrills.java` to see definition/instance/destroy logs, prototype vs singleton behavior, and lazy init.
+
 ```java
 spring-di
 .
