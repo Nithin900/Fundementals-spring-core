@@ -142,6 +142,10 @@ This project demonstrates comprehensive Aspect-Oriented Programming (AOP) in Spr
    - Generates unique per-invocation IDs (8-character UUID).
    - Stores ID in ThreadLocal for access across all aspects.
    - All logs/prints prefixed with `[invocationId]` for easy tracing of a single method call through the entire aspect chain.
+9. **Lifecycle Visibility** (`LifecycleLoggingBeanPostProcessor` in `aop/src/main/java/org/example/infra/LifecycleLoggingBeanPostProcessor.java`)
+   - Logs `postProcessBeforeInitialization` and `postProcessAfterInitialization` for beans under `org.example` (adjustable prefixes).
+   - Highlights proxy creation (`proxyType` + target class) so you can see when AOP kicks in; summary printed on context close.
+   - Toggle flags in the class to include Spring framework beans or to log only AOP proxies.
 
 **Annotations:**
 - `@LogExecutionTime` — Track execution time

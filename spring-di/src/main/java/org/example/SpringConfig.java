@@ -1,17 +1,21 @@
 package org.example;
 
+import org.example.infra.LifecycleLoggingBeanPostProcessor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 
 import java.util.*;
 
 @Configuration
 //@ComponentScan(basePackages = "org.example")
 public class SpringConfig {
+    @Bean
+    public LifecycleLoggingBeanPostProcessor lifecycleLoggingBeanPostProcessor() {
+        return new LifecycleLoggingBeanPostProcessor();
+    }
+
     @Bean
     public AddressService addressService() {
         AddressServiceImpl addressService = new AddressServiceImpl();
